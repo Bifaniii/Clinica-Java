@@ -25,6 +25,9 @@ public class Consulta {
     @Column(name = "date", nullable = false)
     private LocalDateTime date;
 
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
     @NotBlank
     @Column(name = "description", nullable = false)
     private String description;
@@ -36,4 +39,9 @@ public class Consulta {
     @ManyToOne
     @JoinColumn(name = "doctor_id", nullable = false)
     private Medico doctor;
+
+    @PrePersist
+    private void createdAt() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

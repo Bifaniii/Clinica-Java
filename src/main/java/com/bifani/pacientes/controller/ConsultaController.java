@@ -1,12 +1,16 @@
 package com.bifani.pacientes.controller;
 
 import com.bifani.pacientes.dto.CriarConsultaRequest;
+import com.bifani.pacientes.dto.CriarConsultaResponse;
 import com.bifani.pacientes.model.Consulta;
 import com.bifani.pacientes.repository.ConsultaRepository;
 import com.bifani.pacientes.service.ConsultaService;
 import com.bifani.pacientes.service.MedicoService;
 import com.bifani.pacientes.service.PacienteService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,7 +19,6 @@ import java.util.List;
 @RequestMapping("/consultas")
 public class ConsultaController {
     private final ConsultaService consultaService;
-
 
     public ConsultaController(ConsultaService consultaService) {
         this.consultaService = consultaService;
@@ -31,17 +34,11 @@ public class ConsultaController {
         return consultaService.buscarPorId(id);
     }
 
-
     @PostMapping
-    public Consulta criarConsulta(@Valid @RequestBody CriarConsultaRequest request) {
-        Consulta consulta = new Consulta();
-        consulta.setDate(request.getDate());
-        consulta.setDescription(request.getDescription());
+    public ResponseEntity<CriarConsultaResponse> criarConsulta(@Valid @RequestBody CriarConsultaRequest request) {
+        consultaService.criarConsulta(request.pacienteId(), request.medicoId(), request.date());
 
-        return consultaService.criarConsulta(
-                request.getPacienteId(),
-                request.getMedicoId(),
-                consulta);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{id}")

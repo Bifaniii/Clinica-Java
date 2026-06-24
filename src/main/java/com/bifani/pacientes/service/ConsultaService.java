@@ -8,6 +8,7 @@ import com.bifani.pacientes.repository.MedicoRepository;
 import com.bifani.pacientes.repository.PacienteRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -26,15 +27,17 @@ public class ConsultaService {
         return consultaRepository.findAll();
     }
 
-    public Consulta criarConsulta(Long pacienteId, Long medicoId, Consulta consulta) {
+    public Consulta criarConsulta(Long pacienteId, Long medicoId, LocalDateTime dateTime) {
         Paciente paciente = pacienteRepository.findById(pacienteId)
                 .orElseThrow(() -> new RuntimeException("Paciente não encontrado!"));
 
         Medico medico = medicoRepository.findById(medicoId)
                 .orElseThrow(() -> new RuntimeException("Médico não encontrado!"));
 
+        Consulta consulta = new Consulta();
         consulta.setPaciente(paciente);
         consulta.setDoctor(medico);
+        consulta.setDate(dateTime);
 
         return consultaRepository.save(consulta);
     }
