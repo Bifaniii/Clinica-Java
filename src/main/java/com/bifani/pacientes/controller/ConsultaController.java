@@ -3,6 +3,7 @@ package com.bifani.pacientes.controller;
 import com.bifani.pacientes.dto.CriarConsultaRequest;
 import com.bifani.pacientes.dto.CriarConsultaResponse;
 import com.bifani.pacientes.model.Consulta;
+import com.bifani.pacientes.model.Paciente;
 import com.bifani.pacientes.repository.ConsultaRepository;
 import com.bifani.pacientes.service.ConsultaService;
 import com.bifani.pacientes.service.MedicoService;
@@ -19,9 +20,13 @@ import java.util.List;
 @RequestMapping("/consultas")
 public class ConsultaController {
     private final ConsultaService consultaService;
+    private final MedicoService medicoService;
+    private final PacienteService pacienteService;
 
-    public ConsultaController(ConsultaService consultaService) {
+    public ConsultaController(ConsultaService consultaService, MedicoService medicoService, PacienteService pacienteService) {
         this.consultaService = consultaService;
+        this.medicoService = medicoService;
+        this.pacienteService = pacienteService;
     }
 
     @GetMapping
@@ -42,9 +47,16 @@ public class ConsultaController {
     }
 
     @PutMapping("/{id}")
-    public Consulta atualizarConsulta(@PathVariable Long id, @Valid @RequestBody Consulta consulta) {
-        consulta.setId(id);
-        return consultaService.salvar(consulta);
+    public ResponseEntity<CriarConsultaResponse> atualizarConsulta(@PathVariable Long id, @Valid @RequestBody CriarConsultaRequest request) {
+        Consulta consulta = consultaService.buscarPorId(id);
+
+        consulta.setDate(request.date());
+        consulta.setDescription(request.description());
+        consulta.setDoctor(medicoService.buscarMedicoPorId(request.medicoId()));
+        consulta.setPaciente(pacienteService.buscarPorId(request.pacienteId()));
+        consultaService.salvar(consulta);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping("/{id}")
