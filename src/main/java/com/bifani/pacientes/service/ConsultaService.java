@@ -44,17 +44,17 @@ public class ConsultaService {
     }
 
     public Consulta salvar(Long consulta_id, CriarConsultaRequest request){
+
         Consulta consulta = consultaRepository.findById(consulta_id)
-                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
-
-        Medico medico = medicoRepository.findById(request.medicoId())
-                .orElseThrow(() -> new RuntimeException("Médico não encontrado!"));
-        Paciente paciente = pacienteRepository.findById(request.pacienteId())
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado!"));
-
-        consulta.setPaciente(paciente);
-        consulta.setDoctor(medico);
-        consulta.setDate(request.date());
+                .orElseThrow(() -> new RuntimeException("Consulta não encontrada!"));
+        Consulta.builder()
+                .date(request.date())
+                .doctor(medicoRepository.findById(request.medicoId())
+                        .orElseThrow(() -> new RuntimeException("Médico não encontrado")))
+                .paciente(pacienteRepository.findById(request.medicoId())
+                        .orElseThrow(() -> new RuntimeException("paciente não encontrado!")))
+                .date(request.date())
+                .build();
 
         return consultaRepository.save(consulta);
     }

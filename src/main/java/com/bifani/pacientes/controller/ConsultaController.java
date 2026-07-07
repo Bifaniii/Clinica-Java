@@ -20,13 +20,10 @@ import java.util.List;
 @RequestMapping("/consultas")
 public class ConsultaController {
     private final ConsultaService consultaService;
-    private final MedicoService medicoService;
-    private final PacienteService pacienteService;
 
-    public ConsultaController(ConsultaService consultaService, MedicoService medicoService, PacienteService pacienteService) {
+    public ConsultaController(ConsultaService consultaService) {
         this.consultaService = consultaService;
-        this.medicoService = medicoService;
-        this.pacienteService = pacienteService;
+
     }
 
     @GetMapping
