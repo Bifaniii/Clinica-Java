@@ -48,20 +48,15 @@ public class ConsultaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<CriarConsultaResponse> atualizarConsulta(@PathVariable Long id, @Valid @RequestBody CriarConsultaRequest request) {
-        Consulta consulta = consultaService.buscarPorId(id);
-
-        consulta.setDate(request.date());
-        consulta.setDescription(request.description());
-        consulta.setDoctor(medicoService.buscarMedicoPorId(request.medicoId()));
-        consulta.setPaciente(pacienteService.buscarPorId(request.pacienteId()));
-        consultaService.salvar(consulta);
+        consultaService.salvar(id, request);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping("/{id}")
-    public void deletarConsulta(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarConsulta(@PathVariable Long id) {
         consultaService.delete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

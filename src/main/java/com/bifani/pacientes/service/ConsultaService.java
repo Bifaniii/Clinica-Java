@@ -1,5 +1,6 @@
 package com.bifani.pacientes.service;
 
+import com.bifani.pacientes.dto.CriarConsultaRequest;
 import com.bifani.pacientes.model.Consulta;
 import com.bifani.pacientes.model.Medico;
 import com.bifani.pacientes.model.Paciente;
@@ -42,7 +43,19 @@ public class ConsultaService {
         return consultaRepository.save(consulta);
     }
 
-    public Consulta salvar(Consulta consulta){
+    public Consulta salvar(Long consulta_id, CriarConsultaRequest request){
+        Consulta consulta = consultaRepository.findById(consulta_id)
+                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
+
+        Medico medico = medicoRepository.findById(request.medicoId())
+                .orElseThrow(() -> new RuntimeException("Médico não encontrado!"));
+        Paciente paciente = pacienteRepository.findById(request.pacienteId())
+                .orElseThrow(() -> new RuntimeException("Paciente não encontrado!"));
+
+        consulta.setPaciente(paciente);
+        consulta.setDoctor(medico);
+        consulta.setDate(request.date());
+
         return consultaRepository.save(consulta);
     }
 
