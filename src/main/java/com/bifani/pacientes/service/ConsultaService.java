@@ -28,6 +28,11 @@ public class ConsultaService {
         return consultaRepository.findAll();
     }
 
+    public Consulta buscarPorId(Long id) {
+        return consultaRepository.findById(id).
+                orElseThrow(() -> new RuntimeException("Consulta não encontrada!"));
+    }
+
     public Consulta criarConsulta(Long pacienteId, Long medicoId, LocalDateTime dateTime) {
         Paciente paciente = pacienteRepository.findById(pacienteId)
                 .orElseThrow(() -> new RuntimeException("Paciente não encontrado!"));
@@ -57,11 +62,6 @@ public class ConsultaService {
                 .build();
 
         return consultaRepository.save(consulta);
-    }
-
-    public Consulta buscarPorId(Long id) {
-        return consultaRepository.findById(id).
-                orElseThrow(() -> new RuntimeException("Consulta não encontrada!"));
     }
 
     public void delete(Long id) {

@@ -13,18 +13,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "pacientes")
+@PrimaryKeyJoinColumn(name = "usuario_id")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Paciente {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @NotBlank
-    @Column(name = "name", nullable = false)
-    private String name;
+public class Paciente extends Usuario {
 
     @Min(0)
     @Max(120)
