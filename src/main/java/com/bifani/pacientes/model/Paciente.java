@@ -1,5 +1,6 @@
 package com.bifani.pacientes.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -29,6 +30,7 @@ public class Paciente extends Usuario {
     @Column(name = "city", nullable = false)
     private String city;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "paciente")
     private List<Consulta> consultas;
 }

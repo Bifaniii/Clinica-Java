@@ -1,5 +1,6 @@
 package com.bifani.pacientes.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ public class Medico extends Usuario {
     @Column(name = "crm", nullable = false, unique = true)
     private String crm;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "doctor")
     private List<Consulta> consultas;
 }
